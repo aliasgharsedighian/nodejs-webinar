@@ -1,0 +1,13 @@
+openapi: "3.0.3"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: http://localhost:2222/api
+paths:
+  /shop/get-all-products:
+    get:
+      description: "get all products without pagination"
+      parameters: []
+      responses:
+        "200": { description: OK }
