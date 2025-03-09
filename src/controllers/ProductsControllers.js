@@ -18,6 +18,17 @@ export const getAllProducts = async (request, response, next) => {
 
 export const getSingleProduct = async (request, response, next) => {
   try {
+    const productSlug = request.params.slug;
+
+    const res = await client.query(
+      `SELECT * from product where id = ${productSlug}`
+    );
+
+    return response.status(200).json({
+      status: 200,
+      message: "get product successfully",
+      data: res.rows[0],
+    });
   } catch (error) {
     return response.status(500).json({
       status: 500,
