@@ -154,6 +154,33 @@ export const editProduct = async (request, response, next) => {
 
 export const removeProduct = async (request, response, next) => {
   try {
+    const productId = request.params.id;
+    const product = await client.query(
+      `SELECT * from product where id = ${productId}`
+    );
+    if (!product || product.rows.length === 0) {
+      const statusCode = 404;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message: "product not found",
+      });
+    }
+    const deleteProduct = await client.query(
+      `delete from product where id = ${productId}`
+    );
+    if (!deleteProduct) {
+      const statusCode = 500;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message: "error when query on delete product",
+        data: {},
+      });
+    }
+    const statusCode = 200;
+    return response.status(statusCode).json({
+      status: statusCode,
+      message: "product deleted successfully.",
+    });
   } catch (error) {
     return response.status(500).json({
       status: 500,

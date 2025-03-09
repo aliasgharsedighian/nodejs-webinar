@@ -73,3 +73,15 @@ paths:
       responses:
         "200":
           description: OK
+  /shop/remove-product/{id}:
+    delete:
+      description: ""
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: OK
