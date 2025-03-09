@@ -23,3 +23,53 @@ paths:
       responses:
         "200":
           description: OK
+  /shop/add-product:
+    post:
+      description: "create product"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+              required:
+                - title
+                - description
+                - price
+      responses:
+        "200":
+          description: OK
+  /shop/edit-product/{productId}:
+    post:
+      description: ""
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+              required:
+                - title
+                - description
+                - price
+      responses:
+        "200":
+          description: OK
