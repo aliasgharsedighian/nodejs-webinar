@@ -11,14 +11,14 @@ paths:
       parameters: []
       responses:
         "200": { description: OK }
-  /shop/show-product/{slug}:
+  /shop/show-product/{productId}:
     get:
-      summary: "get single product by slug"
+      summary: "get single product by id"
       parameters:
         - in: path
-          name: slug
+          name: productId
           schema:
-            type: string
+            type: integer
           required: true
       responses:
         "200":
