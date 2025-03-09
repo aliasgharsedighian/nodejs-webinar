@@ -2,12 +2,11 @@ import { client } from "../models/pgsqldb.js";
 
 export const getAllProducts = async (request, response, next) => {
   try {
-    const res = await client.query("SELECT * from products", ["Hello world!"]);
-    console.log(res.rows[0]);
+    const res = await client.query("SELECT * from product");
     return response.status(200).json({
       status: 200,
       message: "get all products successfully",
-      data: {},
+      data: res.rows,
     });
   } catch (error) {
     return response.status(500).json({

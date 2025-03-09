@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import productsRoutes from "./src/routes/ProductsRoutes.js";
 
 dotenv.config();
+
 const port = process.env.PORT || 4001;
 
 const app = express();
