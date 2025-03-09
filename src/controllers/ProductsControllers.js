@@ -1,4 +1,4 @@
-import { client } from "../models/pgsqldb.js";
+import { client } from "../config/db.pgsql.js";
 
 export const getAllProducts = async (request, response, next) => {
   try {
