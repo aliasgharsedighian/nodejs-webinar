@@ -77,7 +77,7 @@ export const addProduct = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "title ,description and price is required!",
+        message: "valid title ,description and price is required!",
       });
     }
     const product = createProduct({ ...productBody.data });
@@ -89,11 +89,13 @@ export const addProduct = async (
         data: {},
       });
     }
+    const getNewProduct = await product;
+
     const statusCode = 200;
     return response.status(statusCode).json({
       status: statusCode,
       message: "product created successfully.",
-      data: product,
+      data: getNewProduct,
     });
   } catch (error) {
     return response.status(500).json({
@@ -114,7 +116,7 @@ export const editProduct = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "title ,description and price is required!",
+        message: "valid title ,description and price is required!",
       });
     }
     const product = await findProductById(productId);

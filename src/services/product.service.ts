@@ -27,7 +27,7 @@ export const createProduct = async ({
     `insert into product (title, description, price) values ('${title}', '${description}', ${price})`
   );
   const insertedProduct = await client.query(
-    `select * from product order by id desc limit 1`
+    `select id, title, description, price, created_at, updated_at from product order by id desc limit 1`
   );
   return insertedProduct.rows[0];
 };
