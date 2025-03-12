@@ -1,7 +1,11 @@
 import { client } from "../config/db.pgsql.js";
+import { Request, Response } from "express";
 
 // @access  Public
-export const getAllProducts = async (request, response, next) => {
+export const getAllProducts = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
   try {
     const products = await client.query(
       "SELECT * from product ORDER BY created_at DESC"
@@ -28,7 +32,10 @@ export const getAllProducts = async (request, response, next) => {
   }
 };
 
-export const getSingleProduct = async (request, response, next) => {
+export const getSingleProduct = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
   try {
     const productId = request.params.id;
     const product = await client.query(
@@ -56,7 +63,10 @@ export const getSingleProduct = async (request, response, next) => {
   }
 };
 // @access  Private/Admin
-export const addProduct = async (request, response, next) => {
+export const addProduct = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
   try {
     const { title, description, price } = request.body;
     if (!title || !description || !price) {
@@ -94,7 +104,10 @@ export const addProduct = async (request, response, next) => {
   }
 };
 
-export const editProduct = async (request, response, next) => {
+export const editProduct = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
   try {
     const id = request.params.id;
     const { title, description, price } = request.body;
@@ -152,7 +165,10 @@ export const editProduct = async (request, response, next) => {
   }
 };
 
-export const removeProduct = async (request, response, next) => {
+export const removeProduct = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
   try {
     const productId = request.params.id;
     const product = await client.query(
