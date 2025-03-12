@@ -1,5 +1,13 @@
 import { client } from "../config/db.pgsql.js";
 import { Request, Response } from "express";
+import { CreateProductSchema, UpdateProductSchema } from "../zodSchema.js";
+import {
+  createProduct,
+  findAllProducts,
+  findProductById,
+  removeProductById,
+  updateProductById,
+} from "../services/product.service.js";
 
 // @access  Public
 export const getAllProducts = async (
@@ -7,9 +15,7 @@ export const getAllProducts = async (
   response: Response
 ): Promise<any> => {
   try {
-    const products = await client.query(
-      "SELECT * from product ORDER BY created_at DESC"
-    );
+    const products = await findAllProducts();
     if (!products) {
       const statusCode = 404;
       return response.status(statusCode).json({
@@ -22,7 +28,7 @@ export const getAllProducts = async (
     return response.status(statusCode).json({
       status: statusCode,
       message: "get all products successfully",
-      data: products.rows,
+      data: products,
     });
   } catch (error) {
     return response.status(500).json({
@@ -38,10 +44,8 @@ export const getSingleProduct = async (
 ): Promise<any> => {
   try {
     const productId = request.params.id;
-    const product = await client.query(
-      `SELECT * from product where id = ${productId}`
-    );
-    if (!product || product.rows.length === 0) {
+    const product = await findProductById(productId);
+    if (!product) {
       const statusCode = 404;
       return response.status(statusCode).json({
         status: statusCode,
@@ -53,7 +57,7 @@ export const getSingleProduct = async (
     return response.status(200).json({
       status: 200,
       message: "get product successfully",
-      data: product.rows[0],
+      data: product,
     });
   } catch (error) {
     return response.status(500).json({
@@ -68,18 +72,16 @@ export const addProduct = async (
   response: Response
 ): Promise<any> => {
   try {
-    const { title, description, price } = request.body;
-    if (!title || !description || !price) {
+    const productBody = CreateProductSchema.safeParse(request.body);
+    if (!productBody.success) {
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
         message: "title ,description and price is required!",
       });
     }
-    const createproduct = await client.query(
-      `insert into product (title, description, price) values ('${title}', '${description}', ${price})`
-    );
-    if (!createproduct) {
+    const product = createProduct({ ...productBody.data });
+    if (!product) {
       const statusCode = 500;
       return response.status(statusCode).json({
         status: statusCode,
@@ -87,14 +89,11 @@ export const addProduct = async (
         data: {},
       });
     }
-    const insertedProduct = await client.query(
-      `select * from product order by id desc limit 1`
-    );
     const statusCode = 200;
     return response.status(statusCode).json({
       status: statusCode,
       message: "product created successfully.",
-      data: insertedProduct.rows[0],
+      data: product,
     });
   } catch (error) {
     return response.status(500).json({
@@ -109,19 +108,17 @@ export const editProduct = async (
   response: Response
 ): Promise<any> => {
   try {
-    const id = request.params.id;
-    const { title, description, price } = request.body;
-    if (!title || !description || !price) {
+    const productBody = UpdateProductSchema.safeParse(request.body);
+    const productId = request.params.id;
+    if (!productBody.success) {
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
         message: "title ,description and price is required!",
       });
     }
-    const product = await client.query(
-      `SELECT * from product where id = ${id}`
-    );
-    if (!product || product.rows.length === 0) {
+    const product = await findProductById(productId);
+    if (!product) {
       const statusCode = 404;
       return response.status(statusCode).json({
         status: statusCode,
@@ -129,10 +126,14 @@ export const editProduct = async (
         data: {},
       });
     }
-    const updateProduct = await client.query(
-      `update product set "title" = '${title}', "description" = '${description}', "price" = ${price} where id = ${id}`
-    );
-    if (!updateProduct) {
+    let valuesForUpdate = {
+      title: productBody.data.title || product.title,
+      description: productBody.data.description || product.description,
+      price: productBody.data.price || product.price,
+      productId,
+    };
+    const updateProduct = await updateProductById(valuesForUpdate);
+    if (updateProduct.status !== 200) {
       const statusCode = 500;
       return response.status(statusCode).json({
         status: statusCode,
@@ -140,14 +141,12 @@ export const editProduct = async (
         data: {},
       });
     }
-    const updatedProduct = await client.query(
-      `SELECT * from product where id = ${id}`
-    );
+    const updatedProduct = await findProductById(productId);
     if (!updatedProduct) {
-      const statusCode = 404;
+      const statusCode = 400;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "product not found",
+        message: "product edit failed!",
         data: {},
       });
     }
@@ -155,7 +154,7 @@ export const editProduct = async (
     return response.status(statusCode).json({
       status: statusCode,
       message: "product edited successfully.",
-      data: updatedProduct.rows[0],
+      data: updatedProduct,
     });
   } catch (error) {
     return response.status(500).json({
@@ -181,10 +180,8 @@ export const removeProduct = async (
         message: "product not found",
       });
     }
-    const deleteProduct = await client.query(
-      `delete from product where id = ${productId}`
-    );
-    if (!deleteProduct) {
+    const deleteProduct = await removeProductById(productId);
+    if (deleteProduct.status !== 200) {
       const statusCode = 500;
       return response.status(statusCode).json({
         status: statusCode,
