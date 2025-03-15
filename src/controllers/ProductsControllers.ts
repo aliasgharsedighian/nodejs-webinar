@@ -43,7 +43,7 @@ export const getSingleProduct = async (
   response: Response
 ): Promise<any> => {
   try {
-    const productId = request.params.id;
+    const productId = Number(request.params.id);
     const product = await findProductById(productId);
     if (!product) {
       const statusCode = 404;
@@ -72,15 +72,16 @@ export const addProduct = async (
   response: Response
 ): Promise<any> => {
   try {
+    const userId = request.userId;
     const productBody = CreateProductSchema.safeParse(request.body);
     if (!productBody.success) {
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "valid title ,description and price is required!",
+        message: productBody.error?.errors.map((item) => item.message),
       });
     }
-    const product = createProduct({ ...productBody.data });
+    const product = createProduct({ ...productBody.data, userId });
     if (!product) {
       const statusCode = 500;
       return response.status(statusCode).json({
@@ -110,13 +111,14 @@ export const editProduct = async (
   response: Response
 ): Promise<any> => {
   try {
+    const userId = request.userId;
     const productBody = UpdateProductSchema.safeParse(request.body);
-    const productId = request.params.id;
+    const productId = Number(request.params.id);
     if (!productBody.success) {
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "valid title ,description and price is required!",
+        message: productBody.error?.errors.map((item) => item.message),
       });
     }
     const product = await findProductById(productId);
@@ -132,31 +134,18 @@ export const editProduct = async (
       title: productBody.data.title || product.title,
       description: productBody.data.description || product.description,
       price: productBody.data.price || product.price,
+      images: productBody.data.images || product.images,
+      stock: productBody.data.stock || product.stock,
+      show: productBody.data.show || product.show,
       productId,
+      userId,
     };
     const updateProduct = await updateProductById(valuesForUpdate);
-    if (updateProduct.status !== 200) {
-      const statusCode = 500;
-      return response.status(statusCode).json({
-        status: statusCode,
-        message: "error when query on product table",
-        data: {},
-      });
-    }
-    const updatedProduct = await findProductById(productId);
-    if (!updatedProduct) {
-      const statusCode = 400;
-      return response.status(statusCode).json({
-        status: statusCode,
-        message: "product edit failed!",
-        data: {},
-      });
-    }
     const statusCode = 200;
     return response.status(statusCode).json({
       status: statusCode,
       message: "product edited successfully.",
-      data: updatedProduct,
+      data: updateProduct,
     });
   } catch (error) {
     return response.status(500).json({
