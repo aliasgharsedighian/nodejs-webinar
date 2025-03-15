@@ -54,8 +54,6 @@ paths:
                   type: integer
                 show:
                   type: boolean
-                userId:
-                  type: integer
               required:
                 - title
                 - description
@@ -63,7 +61,6 @@ paths:
                 - images
                 - stock
                 - show
-                - userId
       responses:
         "200":
           description: OK

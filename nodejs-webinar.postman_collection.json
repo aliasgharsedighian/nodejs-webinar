@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "d8b71556-d17f-42f1-a5df-657f091b4f0c",
+		"name": "nodejs-webinar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24392755"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ali2@example.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{nodejs_webinar_app_local}}auth/signup"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "get-all-products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{nodejs_webinar_app_local}}shop/get-all-products"
+					},
+					"response": []
+				},
+				{
+					"name": "show-product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{nodejs_webinar_app_local}}shop/show-product/2"
+					},
+					"response": []
+				},
+				{
+					"name": "create-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{nodejs_webinar_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"this is product test22\",\r\n    \"description\" : \"this is pruduct description test 22\",\r\n    \"price\": 2000000,\r\n    \"images\": [\"test22\"],\r\n    \"stock\": 1,\r\n    \"show\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{nodejs_webinar_app_local}}shop/add-product"
+					},
+					"response": []
+				},
+				{
+					"name": "edit-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{nodejs_webinar_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"this is product test22 edit\",\r\n    \"description\" : null,\r\n    \"price\": null,\r\n    \"images\": null,\r\n    \"stock\": null,\r\n    \"show\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{nodejs_webinar_app_local}}shop/edit-product/10"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
