@@ -184,6 +184,13 @@ export const updateUserInfo = async (
     const userId = request.userId;
     const token = request.token;
     const userBody = UpdateUserSchema.safeParse(request.body);
+    if (!userBody.success) {
+      const statusCode = 403;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message: userBody.error?.errors.map((item) => item.message),
+      });
+    }
     const user = await updateUserById({
       userId,
       firstname: userBody.data.firstname,

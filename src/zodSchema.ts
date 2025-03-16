@@ -38,3 +38,13 @@ export const UpdateUserSchema = z.object({
     lastname: z.string().optional().nullable(),
   }),
 });
+
+export const CartStoreSchema = z.object({
+  description: z.string().optional(),
+  cartItems: z.array(
+    z.object({
+      productId: z.number(),
+      quantity: z.number(),
+    })
+  ),
+});
