@@ -1,4 +1,3 @@
-import { client } from "../config/db.pgsql.js";
 import { Request, Response } from "express";
 import { CreateProductSchema, UpdateProductSchema } from "../zodSchema.js";
 import {
@@ -8,6 +7,7 @@ import {
   removeProductById,
   updateProductById,
 } from "../services/product.service.js";
+import { findUserById } from "../services/user.service.js";
 
 // @access  Public
 export const getAllProducts = async (
@@ -73,6 +73,15 @@ export const addProduct = async (
 ): Promise<any> => {
   try {
     const userId = request.userId;
+    const user = await findUserById(userId);
+    if (user.role !== "ADMIN") {
+      const statusCode = 422;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message:
+          "you not allowed to add product. tell admin to change your role!",
+      });
+    }
     const productBody = CreateProductSchema.safeParse(request.body);
     if (!productBody.success) {
       const statusCode = 403;
@@ -81,7 +90,15 @@ export const addProduct = async (
         message: productBody.error?.errors.map((item) => item.message),
       });
     }
-    const product = createProduct({ ...productBody.data, userId });
+    const product = createProduct({
+      title: productBody.data.title,
+      description: productBody.data.description,
+      price: productBody.data.price,
+      images: productBody.data.images,
+      stock: productBody.data.stock,
+      show: productBody.data.show,
+      userId,
+    });
     if (!product) {
       const statusCode = 500;
       return response.status(statusCode).json({
@@ -112,6 +129,15 @@ export const editProduct = async (
 ): Promise<any> => {
   try {
     const userId = request.userId;
+    const user = await findUserById(userId);
+    if (user.role !== "ADMIN") {
+      const statusCode = 422;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message:
+          "you not allowed to edit product. tell admin to change your role!",
+      });
+    }
     const productBody = UpdateProductSchema.safeParse(request.body);
     const productId = Number(request.params.id);
     if (!productBody.success) {
@@ -161,16 +187,16 @@ export const removeProduct = async (
 ): Promise<any> => {
   try {
     const productId = request.params.id;
-    const product = await client.query(
-      `SELECT * from product where id = ${productId}`
-    );
-    if (!product || product.rows.length === 0) {
-      const statusCode = 404;
-      return response.status(statusCode).json({
-        status: statusCode,
-        message: "product not found",
-      });
-    }
+    // const product = await client.query(
+    //   `SELECT * from product where id = ${productId}`
+    // );
+    // if (!product || product.rows.length === 0) {
+    //   const statusCode = 404;
+    //   return response.status(statusCode).json({
+    //     status: statusCode,
+    //     message: "product not found",
+    //   });
+    // }
     const deleteProduct = await removeProductById(productId);
     if (deleteProduct.status !== 200) {
       const statusCode = 500;
