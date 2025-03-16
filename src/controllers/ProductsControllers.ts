@@ -186,26 +186,18 @@ export const removeProduct = async (
   response: Response
 ): Promise<any> => {
   try {
-    const productId = request.params.id;
-    // const product = await client.query(
-    //   `SELECT * from product where id = ${productId}`
-    // );
-    // if (!product || product.rows.length === 0) {
-    //   const statusCode = 404;
-    //   return response.status(statusCode).json({
-    //     status: statusCode,
-    //     message: "product not found",
-    //   });
-    // }
-    const deleteProduct = await removeProductById(productId);
-    if (deleteProduct.status !== 200) {
-      const statusCode = 500;
+    const productId = Number(request.params.id);
+    const product = await findProductById(productId);
+    if (!product) {
+      const statusCode = 404;
       return response.status(statusCode).json({
         status: statusCode,
-        message: "error when query on delete product",
+        message: "product not found",
         data: {},
       });
     }
+    const deleteProduct = await removeProductById(productId);
+
     const statusCode = 200;
     return response.status(statusCode).json({
       status: statusCode,

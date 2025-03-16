@@ -125,12 +125,22 @@ export const updateProductById = async ({
   }
 };
 
-export const removeProductById = async (productId: string) => {
-  // const removeProduct = await client.query(
-  //   `delete from product where id = ${productId}`
-  // );
-  // if (!removeProduct) {
-  //   return { status: 500 };
-  // }
-  return { status: 200 };
+export const removeProductById = async (productId: number) => {
+  try {
+    // const removeProduct = await client.query(
+    //   `delete from product where id = ${productId}`
+    // );
+    // if (!removeProduct) {
+    //   return { status: 500 };
+    // }
+    // return { status: 200 };
+    const removeProduct = await prisma.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+    return removeProduct;
+  } catch (error) {
+    throw error;
+  }
 };
