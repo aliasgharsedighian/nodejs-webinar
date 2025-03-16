@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "1abf1245-ab7b-4237-9f0f-0d09581c94b9",
+    "_postman_id": "40d14708-64df-4b0a-9a8e-d596c652d8cc",
     "name": "nodejs-webinar",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
     "_exporter_id": "24392755"
@@ -170,6 +170,83 @@
             "method": "DELETE",
             "header": [],
             "url": "{{nodejs_webinar_app_local}}shop/remove-product/10"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "cart-store",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{nodejs_webinar_app_local}}cart/cart-store"
+          },
+          "response": []
+        },
+        {
+          "name": "cart-show",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{nodejs_webinar_app_local}}cart/cart-store"
+          },
+          "response": []
+        },
+        {
+          "name": "carts-index",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{nodejs_webinar_app_local}}cart/cart-store"
           },
           "response": []
         }
