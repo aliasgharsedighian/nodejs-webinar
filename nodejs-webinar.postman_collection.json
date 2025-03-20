@@ -1,9 +1,9 @@
 {
   "info": {
-    "_postman_id": "40d14708-64df-4b0a-9a8e-d596c652d8cc",
+    "_postman_id": "fdebbca4-f8f4-4dcf-935f-4a9b524839ad",
     "name": "nodejs-webinar",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-    "_exporter_id": "24392755"
+    "_exporter_id": "27874970"
   },
   "item": [
     {
@@ -16,7 +16,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"ali222test2@example.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"USER\"\r\n}",
+              "raw": "{\r\n    \"email\": \"ali222@example.com\",\r\n    \"password\": \"password\",\r\n    \"role\": \"ADMIN\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -61,7 +61,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"ali22test@example.com\",\r\n    \"password\": \"password\"\r\n}",
+              "raw": "{\r\n    \"email\": \"ali22@example.com\",\r\n    \"password\": \"password\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -106,7 +106,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{nodejs_webinar_app_local}}shop/show-product/2"
+            "url": "{{nodejs_webinar_app_local}}shop/show-product/1"
           },
           "response": []
         },
@@ -123,7 +123,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"title\": \"this is product test222\",\r\n    \"description\" : \"this is pruduct description test 22\",\r\n    \"price\": 2000000,\r\n    \"images\": [\"test222\"],\r\n    \"stock\": 1,\r\n    \"show\": true\r\n}",
+              "raw": "{\r\n    \"title\": \"this is product test11\",\r\n    \"description\" : \"this is pruduct description test 11\",\r\n    \"price\": 1000000,\r\n    \"images\": [\"test11\"],\r\n    \"stock\": 0,\r\n    \"show\": true\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -154,7 +154,7 @@
                 }
               }
             },
-            "url": "{{nodejs_webinar_app_local}}shop/edit-product/10"
+            "url": "{{nodejs_webinar_app_local}}shop/edit-product/1"
           },
           "response": []
         },
@@ -191,7 +191,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"description\": \"test description\",\r\n    \"address\": \"test address\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":1\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":3\r\n        }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -211,23 +211,14 @@
                 "token": "{{nodejs_webinar_token}}"
               }
             },
-            "method": "POST",
+            "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": "{{nodejs_webinar_app_local}}cart/cart-store"
+            "url": "{{nodejs_webinar_app_local}}cart/get-cart"
           },
           "response": []
         },
         {
-          "name": "carts-index",
+          "name": "update-cart",
           "request": {
             "auth": {
               "type": "bearer",
@@ -239,14 +230,64 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"description\": \"\",\r\n    \"cartItems\" : [\r\n        {\r\n           \"productId\":1,\r\n            \"quantity\":2\r\n        },\r\n                {\r\n           \"productId\":2,\r\n            \"quantity\":3\r\n        },\r\n                {\r\n           \"productId\":3,\r\n            \"quantity\":4\r\n        }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"description\": \"\",\r\n    \"updateItem\" : {\r\n           \"id\": 28,\r\n           \"productId\":1,\r\n            \"quantity\":5\r\n        }\r\n   \r\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{nodejs_webinar_app_local}}cart/cart-store"
+            "url": "{{nodejs_webinar_app_local}}cart/update-cart"
+          },
+          "response": []
+        },
+        {
+          "name": "registration-cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "url": "{{nodejs_webinar_app_local}}cart/registration-cart"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Invoice",
+      "item": [
+        {
+          "name": "get-all-invoice",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{nodejs_webinar_app_local}}invoice/get-all-invoice"
+          },
+          "response": []
+        },
+        {
+          "name": "show-invoice",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{nodejs_webinar_token}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{nodejs_webinar_app_local}}invoice/show-invoice/11"
           },
           "response": []
         }
