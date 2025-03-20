@@ -60,7 +60,6 @@ export const signup = async (
     //   secure: true,
     //   sameSite: "None",
     // });
-    console.log(user);
     const statusCode = 201;
     return response.status(statusCode).json({
       status: statusCode,

@@ -26,26 +26,29 @@ model User {
 }
 
 model Profile {
-  id        Int     @id @default(autoincrement())
-  firstname String?
-  lastname  String?
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int     @unique
+  id           Int     @id @default(autoincrement())
+  firstname    String?
+  lastname     String?
+  mobileNumber String?
+  address      String?
+  user         User    @relation(fields: [userId], references: [id])
+  userId       Int     @unique
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
-  title       String
-  description String
-  price       Decimal
-  images String[]
-  stock       Int        @default(0)
-  show        Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  userId      Int?
-  user        User?      @relation("UserProducts", fields: [userId], references: [id])
-  cartItems   CartItem[]
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  price         Decimal
+  images        String[]
+  stock         Int             @default(0)
+  show          Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  userId        Int?
+  user          User?           @relation("UserProducts", fields: [userId], references: [id])
+  cartItems     CartItem[]
+  Invoice_items Invoice_items[]
 }
 
 model Cart {
@@ -62,6 +65,25 @@ model CartItem {
   cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int
   quantity  Int     @default(1)
+}
+
+model Invoices {
+  id             Int             @id @default(autoincrement())
+  total          Decimal
+  invoiceDate    DateTime        @default(now())
+  customerId     Int
+  invoiceAddress String
+  Invoice_items  Invoice_items[]
+}
+
+model Invoice_items {
+  invoiceLineId Int      @id @default(autoincrement())
+  invoiceId     Int
+  invoice       Invoices @relation(fields: [invoiceId], references: [id])
+  unitPrice     Decimal
+  quantity      Int
+  productId     Int
+  product       Product  @relation(fields: [productId], references: [id])
 }
 
 enum Role {
