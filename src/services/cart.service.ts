@@ -101,6 +101,13 @@ export const moveCartToInvoice = async ({ userId }: { userId: number }) => {
         invoiceAddress: cart.address,
         invoiceDescription: cart.description,
         total: totalPrice,
+        InvoiceItems: {
+          create: cart.cartItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice: item.product.price,
+          })),
+        },
       },
     });
     await prisma.cart.delete({

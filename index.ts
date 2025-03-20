@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import productsRoutes from "./src/routes/ProductsRoutes.js";
 import authRoutes from "./src/routes/AuthRoutes.js";
 import cartRoutes from "./src/routes/CartRoutes.js";
+import invoicesRoutes from "./src/routes/InvoicesRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/shop", productsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/invoice", invoicesRoutes);
 // Non-exist pages handler
 app.get("*", (req, res) => {
   res.status(404).json({
