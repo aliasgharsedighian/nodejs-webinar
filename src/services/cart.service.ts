@@ -22,6 +22,6 @@ export const createCart = async ({
     });
     return cart;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(`Service Error: ${error.message}`);
   }
 };

@@ -16,6 +16,13 @@ app.use(express.json());
 app.use("/api/shop", productsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
+// Non-exist pages handler
+app.get("*", (req, res) => {
+  res.status(404).json({
+    status: 404,
+    message: "Page Not Found",
+  });
+});
 
 app.listen(port, () => {
   console.log(`app running on port ${port}`);

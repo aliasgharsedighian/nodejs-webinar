@@ -34,7 +34,7 @@ export const createUser = async ({
 
     return User;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -50,7 +50,7 @@ export const findUserByEmail = async (email: string) => {
     });
     return user;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -66,7 +66,7 @@ export const findUserById = async (userId: number) => {
     });
     return user;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -101,6 +101,6 @@ export const updateUserById = async ({
     });
     return updatedUser;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };

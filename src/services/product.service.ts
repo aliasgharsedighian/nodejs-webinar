@@ -14,7 +14,7 @@ export const findAllProducts = async () => {
     });
     return products;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -31,7 +31,7 @@ export const findProductById = async (productId: number) => {
     });
     return product;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -73,7 +73,7 @@ export const createProduct = async ({
     });
     return createProduct;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -121,7 +121,7 @@ export const updateProductById = async ({
     });
     return updateProduct;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
 
@@ -141,6 +141,6 @@ export const removeProductById = async (productId: number) => {
     });
     return removeProduct;
   } catch (error) {
-    throw error;
+    throw new Error(`Service Error: ${error.message}`);
   }
 };
