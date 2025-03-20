@@ -41,10 +41,21 @@ export const UpdateUserSchema = z.object({
 
 export const CartStoreSchema = z.object({
   description: z.string().optional(),
+  address: z.string(),
   cartItems: z.array(
     z.object({
       productId: z.number(),
       quantity: z.number(),
     })
   ),
+});
+
+export const UpdateCartSchema = z.object({
+  description: z.string().optional(),
+  address: z.string().optional(),
+  updateItem: z.object({
+    id: z.number(),
+    productId: z.number(),
+    quantity: z.number(),
+  }),
 });

@@ -36,47 +36,50 @@ model Profile {
 }
 
 model Product {
-  id            Int             @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   title         String
   description   String
   price         Decimal
   images        String[]
-  stock         Int             @default(0)
-  show          Boolean         @default(false)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  stock         Int            @default(0)
+  show          Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   userId        Int?
-  user          User?           @relation("UserProducts", fields: [userId], references: [id])
+  user          User?          @relation("UserProducts", fields: [userId], references: [id])
   cartItems     CartItem[]
-  Invoice_items Invoice_items[]
+  Invoice_items InvoiceItems[]
 }
 
 model Cart {
-  id        Int        @id @default(autoincrement())
-  userId    Int        @unique
-  user      User       @relation(fields: [userId], references: [id])
-  cartItems CartItem[]
+  id          Int        @id @default(autoincrement())
+  userId      Int        @unique
+  user        User       @relation(fields: [userId], references: [id])
+  cartItems   CartItem[]
+  description String?
+  address     String
 }
 
 model CartItem {
   id        Int     @id @default(autoincrement())
   product   Product @relation(fields: [productId], references: [id])
   productId Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   cartId    Int
   quantity  Int     @default(1)
 }
 
 model Invoices {
-  id             Int             @id @default(autoincrement())
-  total          Decimal
-  invoiceDate    DateTime        @default(now())
-  customerId     Int
-  invoiceAddress String
-  Invoice_items  Invoice_items[]
+  id                 Int            @id @default(autoincrement())
+  total              Decimal
+  invoiceDate        DateTime       @default(now())
+  customerId         Int
+  invoiceAddress     String
+  invoiceDescription String?
+  InvoiceItems       InvoiceItems[]
 }
 
-model Invoice_items {
+model InvoiceItems {
   invoiceLineId Int      @id @default(autoincrement())
   invoiceId     Int
   invoice       Invoices @relation(fields: [invoiceId], references: [id])
