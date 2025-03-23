@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
-import { CreateProductSchema, UpdateProductSchema } from "../zodSchema.js";
+import {
+  CreateProductCategory,
+  CreateProductSchema,
+  UpdateProductSchema,
+} from "../zodSchema.js";
 import {
   createProduct,
   findAllProducts,
   findProductById,
   removeProductById,
   updateProductById,
+  createProductCategory,
 } from "../services/product.service.js";
 import { findUserById } from "../services/user.service.js";
 
@@ -15,7 +20,10 @@ export const getAllProducts = async (
   response: Response
 ): Promise<any> => {
   try {
-    const products = await findAllProducts();
+    const page = +request.query.page || 1;
+    const limit = +request.query.limit || 12;
+
+    const products = await findAllProducts({ page, limit });
     if (!products) {
       const statusCode = 404;
       return response.status(statusCode).json({
@@ -87,10 +95,12 @@ export const addProduct = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: productBody.error?.errors.map((item) => item.message),
+        message: productBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
-    const product = createProduct({
+    const product = await createProduct({
       title: productBody.data.title,
       description: productBody.data.description,
       price: productBody.data.price,
@@ -98,6 +108,7 @@ export const addProduct = async (
       stock: productBody.data.stock,
       show: productBody.data.show,
       userId,
+      categoryId: productBody.data.categories,
     });
     if (!product) {
       const statusCode = 500;
@@ -107,13 +118,12 @@ export const addProduct = async (
         data: {},
       });
     }
-    const getNewProduct = await product;
 
     const statusCode = 200;
     return response.status(statusCode).json({
       status: statusCode,
       message: "product created successfully.",
-      data: getNewProduct,
+      data: product,
     });
   } catch (error) {
     return response.status(500).json({
@@ -144,7 +154,9 @@ export const editProduct = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: productBody.error?.errors.map((item) => item.message),
+        message: productBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     const product = await findProductById(productId);
@@ -165,6 +177,9 @@ export const editProduct = async (
       show: productBody.data.show || product.show,
       productId,
       userId,
+      categoryId:
+        productBody.data.categories ||
+        product.categories.map((item) => item.id),
     };
     const updateProduct = await updateProductById(valuesForUpdate);
     const statusCode = 200;
@@ -207,6 +222,48 @@ export const removeProduct = async (
     return response.status(500).json({
       status: 500,
       message: `An Error occured while remove product: ${error}`,
+    });
+  }
+};
+
+export const addProductCategory = async (
+  request: Request,
+  response: Response
+): Promise<any> => {
+  try {
+    const userId = request.userId;
+    const user = await findUserById(userId);
+    if (user.role !== "ADMIN") {
+      const statusCode = 422;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message:
+          "you not allowed to add product category. tell admin to change your role!",
+      });
+    }
+    const categoryBody = CreateProductCategory.safeParse(request.body);
+    if (!categoryBody.success) {
+      const statusCode = 403;
+      return response.status(statusCode).json({
+        status: statusCode,
+        message: categoryBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
+      });
+    }
+    const productCategory = await createProductCategory({
+      name: categoryBody.data.name,
+    });
+    const statusCode = 200;
+    return response.status(statusCode).json({
+      status: statusCode,
+      message: "product category created successfully.",
+      data: productCategory,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      status: 500,
+      message: `An Error occured while add product category: ${error}`,
     });
   }
 };

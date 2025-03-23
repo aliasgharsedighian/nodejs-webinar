@@ -1,18 +1,37 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export const findAllProducts = async () => {
+export const findAllProducts = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}) => {
   try {
     // const products = await client.query(
     //   "SELECT id, title, description, price, created_at, updated_at from product ORDER BY created_at DESC"
     // );
     // return products.rows;
+    const skip = (page - 1) * limit;
     const products = await prisma.product.findMany({
+      skip,
+      take: limit,
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        categories: true,
+      },
     });
-    return products;
+    const totalCount = await prisma.product.count();
+
+    return {
+      products,
+      totalCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+    };
   } catch (error) {
     throw new Error(`Service Error: ${error.message}`);
   }
@@ -28,6 +47,7 @@ export const findProductById = async (productId: number) => {
       where: {
         id: productId,
       },
+      include: { categories: true },
     });
     return product;
   } catch (error) {
@@ -43,6 +63,7 @@ export const createProduct = async ({
   stock,
   show,
   userId,
+  categoryId,
 }: {
   userId: number;
   title: string;
@@ -51,6 +72,7 @@ export const createProduct = async ({
   images: string[];
   stock: number;
   show: boolean;
+  categoryId: any;
 }) => {
   try {
     // const createProduct = await client.query(
@@ -60,6 +82,7 @@ export const createProduct = async ({
     //   `select id, title, description, price, created_at, updated_at from product order by id desc limit 1`
     // );
     // return insertedProduct.rows[0];
+
     const createProduct = await prisma.product.create({
       data: {
         title,
@@ -69,6 +92,14 @@ export const createProduct = async ({
         stock,
         show,
         userId,
+        categories: {
+          connect: categoryId.map((item) => {
+            return { id: item };
+          }),
+        },
+      },
+      include: {
+        categories: true,
       },
     });
     return createProduct;
@@ -86,6 +117,7 @@ export const updateProductById = async ({
   show,
   productId,
   userId,
+  categoryId,
 }: {
   title: string;
   description: string;
@@ -95,6 +127,7 @@ export const updateProductById = async ({
   show: boolean;
   productId: number;
   userId: number;
+  categoryId: any;
 }) => {
   try {
     // const updateProduct = await client.query(
@@ -117,6 +150,14 @@ export const updateProductById = async ({
         stock,
         show,
         userId,
+        categories: {
+          set: categoryId.map((item) => {
+            return { id: item };
+          }),
+        },
+      },
+      include: {
+        categories: true,
       },
     });
     return updateProduct;
@@ -140,6 +181,19 @@ export const removeProductById = async (productId: number) => {
       },
     });
     return removeProduct;
+  } catch (error) {
+    throw new Error(`Service Error: ${error.message}`);
+  }
+};
+
+export const createProductCategory = async ({ name }: { name: string }) => {
+  try {
+    const addCategory = await prisma.productCategory.create({
+      data: {
+        name,
+      },
+    });
+    return addCategory;
   } catch (error) {
     throw new Error(`Service Error: ${error.message}`);
   }

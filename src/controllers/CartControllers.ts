@@ -18,7 +18,9 @@ export const cartStore = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: userBody.error?.errors.map((item) => item.message),
+        message: userBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     // console.log({ userId, ...userBody.data.cartItems });
@@ -82,7 +84,9 @@ export const updateCart = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: userBody.error?.errors.map((item) => item.message),
+        message: userBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     const cart = await getCartById({ userId });

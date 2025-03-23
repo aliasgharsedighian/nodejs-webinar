@@ -7,6 +7,7 @@ export const CreateProductSchema = z.object({
   images: z.array(z.string()).nonempty(),
   stock: z.number(),
   show: z.boolean(),
+  categories: z.array(z.number()),
 });
 
 export const UpdateProductSchema = z.object({
@@ -16,6 +17,15 @@ export const UpdateProductSchema = z.object({
   images: z.array(z.string()).optional().nullable(),
   stock: z.number().optional().nullable(),
   show: z.boolean().optional().nullable(),
+  categories: z.array(z.number().optional().nullable()).optional(),
+});
+
+export const CreateProductCategory = z.object({
+  name: z.string(),
+});
+
+export const UpdateProductCategory = z.object({
+  name: z.string().optional().nullable(),
 });
 
 export const CreateUserSchema = z.object({

@@ -49,6 +49,13 @@ model Product {
   user          User?          @relation("UserProducts", fields: [userId], references: [id])
   cartItems     CartItem[]
   Invoice_items InvoiceItems[]
+  categories ProductCategory[]
+}
+
+model ProductCategory {
+  id            Int            @id @default(autoincrement())
+  name  String @unique
+  products Product[]
 }
 
 model Cart {

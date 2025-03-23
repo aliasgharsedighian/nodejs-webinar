@@ -37,7 +37,9 @@ export const signup = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: userBody.error?.errors.map((item) => item.message),
+        message: userBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     const userExist = await findUserByEmail(userBody.data.email);
@@ -91,7 +93,9 @@ export const signin = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: userBody.error?.errors.map((item) => item.message),
+        message: userBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     const user = await findUserByEmail(userBody.data.email);
@@ -187,7 +191,9 @@ export const updateUserInfo = async (
       const statusCode = 403;
       return response.status(statusCode).json({
         status: statusCode,
-        message: userBody.error?.errors.map((item) => item.message),
+        message: userBody.error?.errors.map(
+          (item, index) => `${item.path[0]} ${item.message}`
+        ),
       });
     }
     const user = await updateUserById({
