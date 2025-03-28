@@ -119,7 +119,7 @@ export const addProduct = async (
       });
     }
 
-    const statusCode = 200;
+    const statusCode = 201;
     return response.status(statusCode).json({
       status: statusCode,
       message: "product created successfully.",
