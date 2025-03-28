@@ -4,8 +4,8 @@ import {
   signin,
   signup,
   updateUserInfo,
-} from "../controllers/AuthControllers";
-import { authenticateToken } from "../middlewares/BearerAuthMiddleware";
+} from "../../controllers/AuthControllers";
+import { authenticateToken } from "../../middlewares/BearerAuthMiddleware";
 
 const authRoutes = Router();
 

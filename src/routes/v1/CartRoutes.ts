@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { authenticateToken } from "../middlewares/BearerAuthMiddleware";
+import { authenticateToken } from "../../middlewares/BearerAuthMiddleware";
 import {
   cartStore,
   getCart,
   registrationCart,
   updateCart,
-} from "../controllers/CartControllers";
+} from "../../controllers/CartControllers";
 
 const cartRoutes = Router();
 

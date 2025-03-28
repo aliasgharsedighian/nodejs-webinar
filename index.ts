@@ -1,9 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import productsRoutes from "./src/routes/ProductsRoutes.js";
-import authRoutes from "./src/routes/AuthRoutes.js";
-import cartRoutes from "./src/routes/CartRoutes.js";
-import invoicesRoutes from "./src/routes/InvoicesRoutes.js";
+import V1Router from "./src/routes/routes";
 
 dotenv.config();
 
@@ -14,11 +11,8 @@ const app = express();
 //Body parsers
 app.use(express.json());
 
-app.use("/api/shop", productsRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/invoice", invoicesRoutes);
-// Non-exist pages handler
+app.use("/api/v1", V1Router);
+// Non-exist get pages handler
 app.get("*", (req, res) => {
   res.status(404).json({
     status: 404,

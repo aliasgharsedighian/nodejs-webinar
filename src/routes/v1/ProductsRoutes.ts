@@ -6,8 +6,8 @@ import {
   getAllProducts,
   getSingleProduct,
   removeProduct,
-} from "../controllers/ProductsControllers.js";
-import { authenticateToken } from "../middlewares/BearerAuthMiddleware.js";
+} from "../../controllers/ProductsControllers.js";
+import { authenticateToken } from "../../middlewares/BearerAuthMiddleware.js";
 
 const productsRoutes = Router();
 

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { authenticateToken } from "../middlewares/BearerAuthMiddleware";
+import { authenticateToken } from "../../middlewares/BearerAuthMiddleware";
 import {
   getAllInvoices,
   getSingleInvoice,
-} from "../controllers/InvoicesControllers";
+} from "../../controllers/InvoicesControllers";
 
 const invoicesRoutes = Router();
 
